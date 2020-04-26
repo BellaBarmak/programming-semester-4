@@ -181,7 +181,7 @@ enum forth_result read_word(FILE* source,
     
     return FORTH_EOF;
 }
-
+//jgfhfghgfjhfogj
 static void forth_run_word(struct forth *forth, const struct word *word);
 static void forth_run_number(struct forth *forth,
     size_t length, const char word_buffer[length]);
