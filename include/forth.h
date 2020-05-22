@@ -16,6 +16,7 @@ struct word {
     bool immediate;
     uint8_t length;
     char name[];
+    int numofword;
 };
 
 struct forth {

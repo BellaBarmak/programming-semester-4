@@ -62,6 +62,7 @@ void words_add(struct forth *forth)
     forth_add_codeword(forth, ",", comma);
     forth_add_codeword(forth, "next", next);
     forth_add_codeword(forth, "\\", line_comment);
+    forth_add_codeword(forth, "number", number_word);
 
     status = forth_add_compileword(forth, "square", square);
     assert(!status);
@@ -357,4 +358,10 @@ static void line_comment(struct forth *forth)
     do {
         c = fgetc(forth->input);
     } while (c > 0 && c != '\n');
+}
+
+void number_word(struct forth *forth)
+{
+    char* s;
+    fgets(s,)
 }

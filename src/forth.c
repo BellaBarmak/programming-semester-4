@@ -91,7 +91,9 @@ struct word* word_add(struct forth *forth,
     memcpy(word->name, name, length);
     forth->memory_free = (cell*)word_code(word);
     assert((char*)forth->memory_free >= word->name + length);
+    forth->numofword=0;
     forth->latest = word;
+    
     return word;
 }
 
@@ -181,7 +183,7 @@ enum forth_result read_word(FILE* source,
     
     return FORTH_EOF;
 }
-//jgfhfghgfjhfogj
+
 static void forth_run_word(struct forth *forth, const struct word *word);
 static void forth_run_number(struct forth *forth,
     size_t length, const char word_buffer[length]);
