@@ -16,6 +16,9 @@ void rot(struct forth *forth);
 void rot_back(struct forth *forth);
 void show(struct forth *forth);
 void over(struct forth *forth);
+void key(struct forth *forth);
+void _comment(struct forth *forth);
+void comment_2(struct forth *forth);
 
 void _true(struct forth *forth);
 void _false(struct forth *forth);

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "words.h"
 
@@ -36,6 +37,9 @@ void words_add(struct forth *forth)
     forth_add_codeword(forth, "=", _eq);
     forth_add_codeword(forth, "<", lt);
     forth_add_codeword(forth, "within", within);
+    forth_add_codeword(forth, "key", key);
+    forth_add_codeword(forth, "\\\\", _comment);
+    forth_add_codeword(forth,"(",comment_2);
 
     forth_add_codeword(forth, "exit", forth_exit);
     forth_add_codeword(forth, "lit", literal);
@@ -66,6 +70,47 @@ void words_add(struct forth *forth)
     status = forth_add_compileword(forth, "square", square);
     assert(!status);
 }
+
+void key(struct forth *forth)
+{
+    int c;
+    {
+        c=fgetc(forth->input);
+    }
+    while(isspace(c))
+    if (c>0)
+        forth_push(forth, c);
+}
+
+void _comment(struct forth *forth)
+{
+    int c;
+    c=fgetc(forth->input);
+    while ((c!='\n') && (c>0))
+    {
+        c=fgetc(forth->input);
+    }
+}
+
+void comment_2(struct forth *forth)
+{
+    int c;
+    int t=0;
+    {
+        c=fgetc(forth->input);
+        if (c=='(')
+            t++;
+        if (c==')')
+        {
+            if (t == 0)
+                return;
+            else
+                t--;
+        }
+    }while(c>0);
+    printf ("%d", t);
+}
+
 
 void drop(struct forth *forth) {
     forth_pop(forth);
