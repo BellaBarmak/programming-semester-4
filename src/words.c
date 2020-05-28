@@ -37,9 +37,7 @@ void words_add(struct forth *forth)
     forth_add_codeword(forth, "=", _eq);
     forth_add_codeword(forth, "<", lt);
     forth_add_codeword(forth, "within", within);
-    forth_add_codeword(forth, "key", key);
-    forth_add_codeword(forth, "\\\\", _comment);
-    forth_add_codeword(forth,"(",comment_2);
+    
 
     forth_add_codeword(forth, "exit", forth_exit);
     forth_add_codeword(forth, "lit", literal);
@@ -66,6 +64,9 @@ void words_add(struct forth *forth)
     forth_add_codeword(forth, ",", comma);
     forth_add_codeword(forth, "next", next);
     forth_add_codeword(forth, "\\", line_comment);
+    forth_add_codeword(forth, "key", key);
+    forth_add_codeword(forth, "\\", _comment);
+    forth_add_codeword(forth,"(",comment_2);
 
     status = forth_add_compileword(forth, "square", square);
     assert(!status);
@@ -74,12 +75,13 @@ void words_add(struct forth *forth)
 void key(struct forth *forth)
 {
     int c;
+    do
     {
         c=fgetc(forth->input);
     }
-    while(isspace(c))
-    if (c>0)
-        forth_push(forth, c);
+    while(isspace(c));
+    if (isdigit(c))
+        forth_push(forth, c-'0');
 }
 
 void _comment(struct forth *forth)
@@ -96,6 +98,7 @@ void comment_2(struct forth *forth)
 {
     int c;
     int t=0;
+    do
     {
         c=fgetc(forth->input);
         if (c=='(')
