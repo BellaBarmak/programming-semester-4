@@ -362,6 +362,8 @@ static void line_comment(struct forth *forth)
 
 void number_word(struct forth *forth)
 {
-    char* s;
-    fgets(s,)
+    char s[100];
+    fscanf(forth->input,"Word %s", s);
+    const struct word* word = word_find(forth->latest, strlen(s)-1, s);
+    printf("%d", word->num_of_word);
 }

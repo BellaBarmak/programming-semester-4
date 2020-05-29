@@ -91,7 +91,7 @@ struct word* word_add(struct forth *forth,
     memcpy(word->name, name, length);
     forth->memory_free = (cell*)word_code(word);
     assert((char*)forth->memory_free >= word->name + length);
-    forth->numofword=0;
+    word->num_of_word=0;
     forth->latest = word;
     
     return word;

@@ -16,7 +16,7 @@ void rot(struct forth *forth);
 void rot_back(struct forth *forth);
 void show(struct forth *forth);
 void over(struct forth *forth);
-void nember_word(struct forth *forth);
+void number_word(struct forth *forth);
 
 void _true(struct forth *forth);
 void _false(struct forth *forth);

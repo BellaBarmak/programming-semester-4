@@ -15,8 +15,9 @@ struct word {
     bool hidden;
     bool immediate;
     uint8_t length;
-    char name[];
-    int numofword;
+    int num_of_word;
+    char name[];   
+    
 };
 
 struct forth {
