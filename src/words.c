@@ -62,7 +62,7 @@ void words_add(struct forth *forth)
     forth_add_codeword(forth, ",", comma);
     forth_add_codeword(forth, "next", next);
     forth_add_codeword(forth, "\\", line_comment);
-    forth_add_codeword(forth, "number", number_word);
+    forth_add_codeword(forth, "time", time_word);
     forth_add_codeword(forth, "stat", statistics);
 
     status = forth_add_compileword(forth, "square", square);
@@ -71,7 +71,7 @@ void words_add(struct forth *forth)
 
 struct word_i{
     char name[MAX_WORD + 1];
-    int num_of_word;
+    clock_t time;
 };
 
 void statistics(struct forth *forth)
@@ -85,23 +85,23 @@ void statistics(struct forth *forth)
     for( i=0;i<count;i++)
     {
         memcpy(arr[i].name,t->name, t->length);
-        arr[i].num_of_word=t->num_of_word;
+        arr[i].time=t->time;
         t=t->next;
     }
     for(i=0;i<count-1;i++)
         for(j=0;j<count-i-1;j++)
-            if (arr[j].num_of_word<arr[j+1].num_of_word)
+            if (arr[j].time<arr[j+1].time)
             {
                 temp=arr[j];
                 arr[j]=arr[j+1];
                 arr[j+1]=temp;
             }
     for(i=0;i<count;i++)
-        printf("%s\t%d\n", arr[i].name, arr[i].num_of_word);
+        printf("%s   %lf\n", arr[i].name, (double)(arr[i].time)/CLOCKS_PER_SEC);
     free(arr);
 }
 
-void number_word(struct forth *forth)
+void time_word(struct forth *forth)
 {
     size_t length;
     char word_buffer[MAX_WORD+1] = {0};
@@ -113,7 +113,7 @@ void number_word(struct forth *forth)
         )) == FORTH_OK) {
         const struct word* word = word_find(forth->latest, length, word_buffer);
         if (word != NULL)
-            printf("%d\n", word->num_of_word);
+            printf("%lf\n", (double)(word->time)/CLOCKS_PER_SEC);
     }
 }
 

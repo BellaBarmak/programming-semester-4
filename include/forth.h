@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
-
+#include <time.h>
 struct forth;
 typedef intptr_t cell;
 
@@ -15,7 +15,7 @@ struct word {
     bool hidden;
     bool immediate;
     uint8_t length;
-    int num_of_word;
+    clock_t time;
     char name[];   
     
 };

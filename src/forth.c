@@ -92,7 +92,7 @@ struct word* word_add(struct forth *forth,
     forth->memory_free = (cell*)word_code(word);
     assert((char*)forth->memory_free >= word->name + length);
     forth->count++;
-    word->num_of_word=0;
+    word->time=0;
     forth->latest = word;
     
     return word;
@@ -206,8 +206,10 @@ enum forth_result forth_run(struct forth* forth)
             forth_run_number(forth, length, word_buffer);
         } else if (word->immediate || !forth->is_compiling) {
             struct word * temp=(void *)word;
-            temp->num_of_word++;
+            clock_t start = clock();
             forth_run_word(forth, word);
+            clock_t end = clock();
+            temp->time+=(end-start);
         } else {
             forth_emit(forth, (cell)word);
         }
