@@ -91,6 +91,7 @@ struct word* word_add(struct forth *forth,
     memcpy(word->name, name, length);
     forth->memory_free = (cell*)word_code(word);
     assert((char*)forth->memory_free >= word->name + length);
+    forth->count++;
     word->num_of_word=0;
     forth->latest = word;
     
@@ -200,11 +201,12 @@ enum forth_result forth_run(struct forth* forth)
             word_buffer,
             &length
         )) == FORTH_OK) {
-
         const struct word* word = word_find(forth->latest, length, word_buffer);
         if (word == NULL) {
             forth_run_number(forth, length, word_buffer);
         } else if (word->immediate || !forth->is_compiling) {
+            struct word * temp=(void *)word;
+            temp->num_of_word++;
             forth_run_word(forth, word);
         } else {
             forth_emit(forth, (cell)word);

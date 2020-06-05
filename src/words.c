@@ -63,10 +63,60 @@ void words_add(struct forth *forth)
     forth_add_codeword(forth, "next", next);
     forth_add_codeword(forth, "\\", line_comment);
     forth_add_codeword(forth, "number", number_word);
+    forth_add_codeword(forth, "stat", statistics);
 
     status = forth_add_compileword(forth, "square", square);
     assert(!status);
 }
+
+struct word_i{
+    char name[MAX_WORD + 1];
+    int num_of_word;
+};
+
+void statistics(struct forth *forth)
+{
+    int i,j, count;
+    count=forth->count;
+    struct word_i *arr;
+    struct word_i temp;
+    arr=(struct word_i *)malloc(forth->count*sizeof(struct word_i));
+    struct word *t=forth->latest;
+    for( i=0;i<count;i++)
+    {
+        memcpy(arr[i].name,t->name, t->length);
+        arr[i].num_of_word=t->num_of_word;
+        t=t->next;
+    }
+    for(i=0;i<count-1;i++)
+        for(j=0;j<count-i-1;j++)
+            if (arr[j].num_of_word<arr[j+1].num_of_word)
+            {
+                temp=arr[j];
+                arr[j]=arr[j+1];
+                arr[j+1]=temp;
+            }
+    for(i=0;i<count;i++)
+        printf("%s\t%d\n", arr[i].name, arr[i].num_of_word);
+    free(arr);
+}
+
+void number_word(struct forth *forth)
+{
+    size_t length;
+    char word_buffer[MAX_WORD+1] = {0};
+    if ((read_word(
+            forth->input,
+            sizeof(word_buffer),
+            word_buffer,
+            &length
+        )) == FORTH_OK) {
+        const struct word* word = word_find(forth->latest, length, word_buffer);
+        if (word != NULL)
+            printf("%d\n", word->num_of_word);
+    }
+}
+
 
 void drop(struct forth *forth) {
     forth_pop(forth);
@@ -360,10 +410,3 @@ static void line_comment(struct forth *forth)
     } while (c > 0 && c != '\n');
 }
 
-void number_word(struct forth *forth)
-{
-    char s[100];
-    fscanf(forth->input,"Word %s", s);
-    const struct word* word = word_find(forth->latest, strlen(s)-1, s);
-    printf("%d", word->num_of_word);
-}

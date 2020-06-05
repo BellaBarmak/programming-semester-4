@@ -30,7 +30,7 @@ struct forth {
     bool is_compiling;
 
     FILE* input;
-
+    int count;
     cell *memory_free;
     cell *sp0;
     cell *rp0;
