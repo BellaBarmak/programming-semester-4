@@ -85,6 +85,7 @@ void statistics(struct forth *forth)
     for( i=0;i<count;i++)
     {
         memcpy(arr[i].name,t->name, t->length);
+        (arr[i].name)[t->length]=0;
         arr[i].time=t->time;
         t=t->next;
     }
