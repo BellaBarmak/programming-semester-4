@@ -36,6 +36,8 @@ void words_add(struct forth *forth)
     forth_add_codeword(forth, "=", _eq);
     forth_add_codeword(forth, "<", lt);
     forth_add_codeword(forth, "within", within);
+    forth_add_codeword(forth, "number", number_word);
+    forth_add_codeword(forth, "stat", statistics);
 
     forth_add_codeword(forth, "exit", forth_exit);
     forth_add_codeword(forth, "lit", literal);
@@ -62,17 +64,23 @@ void words_add(struct forth *forth)
     forth_add_codeword(forth, ",", comma);
     forth_add_codeword(forth, "next", next);
     forth_add_codeword(forth, "\\", line_comment);
-    forth_add_codeword(forth, "number", number_word);
-    forth_add_codeword(forth, "stat", statistics);
+    
 
     status = forth_add_compileword(forth, "square", square);
     assert(!status);
 }
 
+
 struct word_i{
     char name[MAX_WORD + 1];
     int num_of_word;
 };
+void equal(struct word_i *a, struct word_i b);
+void equal(struct word_i *a, struct word_i b)
+{
+    memcpy(a->name,b.name, MAX_WORD+1);
+    a->num_of_word=b.num_of_word;
+}
 
 void statistics(struct forth *forth)
 {
@@ -85,6 +93,7 @@ void statistics(struct forth *forth)
     for( i=0;i<count;i++)
     {
         memcpy(arr[i].name,t->name, t->length);
+        (arr[i].name)[t->length]=0;
         arr[i].num_of_word=t->num_of_word;
         t=t->next;
     }
@@ -92,9 +101,9 @@ void statistics(struct forth *forth)
         for(j=0;j<count-i-1;j++)
             if (arr[j].num_of_word<arr[j+1].num_of_word)
             {
-                temp=arr[j];
-                arr[j]=arr[j+1];
-                arr[j+1]=temp;
+                equal(&temp, arr[j]);
+                equal(&(arr[j]), arr[j+1]);
+                equal(&(arr[j+1]), temp);
             }
     for(i=0;i<count;i++)
         printf("%s\t%d\n", arr[i].name, arr[i].num_of_word);
